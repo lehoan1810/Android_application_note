@@ -16,4 +16,16 @@
         android:name="com.example.myapplication.ui.category.categoryFragment"
         android:label="Category"
         tools:layout="@layout/fragment_chung" />
+
+    <fragment
+        android:id="@+id/nav_priority"
+        android:name="com.example.myapplication.ui.priority.PriorityFragment"
+        android:label="Priority"
+        tools:layout="@layout/fragment_chung" />
+
+    <fragment
+        android:id="@+id/nav_status"
+        android:name="com.example.myapplication.ui.status.StatusFragment"
+        android:label="Staus"
+        tools:layout="@layout/fragment_chung" />
 </navigation>

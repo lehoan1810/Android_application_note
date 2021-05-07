@@ -1,5 +1,6 @@
-package com.example.myapplication.ui.category;
+package com.example.myapplication.ui.status;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -17,20 +18,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.R;
 import com.example.myapplication.database.AppDatabase;
-import com.example.myapplication.database.Category;
+import com.example.myapplication.database.Status;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.navigation.NavigationView;
-
-import org.w3c.dom.Text;
 
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
-public class categoryFragment extends Fragment {
-    List<Category> categories;
-    CategoryAdapter categoryAdapter;
-    String user;
+public class StatusFragment extends Fragment {
+    List<Status> statuses;
+    StatusAdapter statusAdapter;
 
     @Nullable
     @Override
@@ -42,24 +39,14 @@ public class categoryFragment extends Fragment {
 
         AppDatabase db = AppDatabase.getDatabase(getContext());
 
-
         RecyclerView categoryView = root.findViewById(R.id.recycle_view);
 
-        NavigationView navigationView = getActivity().findViewById(R.id.nav_view);
-
-        View header = navigationView.getHeaderView(0);
-
-        TextView tv_username = header.findViewById(R.id.tv_username);
-
-        user = tv_username.getText().toString();
-
         db.getQueryExecutor().execute(() -> {
-            categories = db.categoryDaoDao().getUserCategory(user);
-            getActivity().runOnUiThread(() -> {
-                categoryAdapter = new CategoryAdapter(categories);
-                categoryView.setAdapter(categoryAdapter);
+            statuses = db.statusDao().getAll();
+            this.getActivity().runOnUiThread(() -> {
+                statusAdapter = new StatusAdapter(statuses);
+                categoryView.setAdapter(statusAdapter);
                 categoryView.setLayoutManager(new LinearLayoutManager(this.getContext()));
-
             });
         });
 
@@ -69,22 +56,22 @@ public class categoryFragment extends Fragment {
         Button btnAdd = view.findViewById(R.id.btn_category_add);
         EditText edCategory = view.findViewById(R.id.edittext_category);
         TextView tv = view.findViewById(R.id.textView_dialog_title);
-        tv.setText("Category Form");
+        tv.setText("Status Form");
         al.setView(view);
 
         btnAdd.setOnClickListener(v1 -> {
-            Category c = new Category();
+            Status c = new Status();
             c.name = edCategory.getText().toString();
             c.created_date = LocalDateTime.now().toString();
-            c.user = this.user;
             AppDatabase.databaseWriteExecutor.execute(()->{
-                if(db.categoryDaoDao().find(c.name, c.user) != null)
+                if(db.statusDao().find(c.name) != null)
                     return;
-                db.categoryDaoDao().insert(c);
-                getActivity().runOnUiThread(() -> {
+                db.statusDao().insert(c);
+                this.getActivity().runOnUiThread(() -> {
 
-                    categoryAdapter.addCategory(c);
-                    categoryAdapter.notifyItemInserted(categoryAdapter.getItemCount());
+                    statusAdapter.add(c);
+                    statusAdapter.notifyItemInserted(statusAdapter.getItemCount());
+                    edCategory.setText("");
 
                 });
             });

@@ -7,13 +7,11 @@ import androidx.room.PrimaryKey;
 
 import java.util.Date;
 
-@Entity(tableName = "categories",primaryKeys = {"name", "user"})
-public class Category {
+@Entity(tableName = "priority")
+public class Priority {
+    @PrimaryKey
     @NonNull
     public String name;
 
     public String created_date;
-
-    @NonNull
-    public String user;
 }

@@ -17,7 +17,13 @@ public interface CategoryDao {
     List<Category> getAllCategory();
 
     @Query("SELECT * FROM categories WHERE name = :name")
-    Category findCategory(String name);
+    Category findAllCategory(String name);
+
+    @Query("SELECT * FROM categories WHERE user = :username")
+    List<Category> getUserCategory(String username);
+
+    @Query("SElECT * FROM categories WHERE user = :username AND name = :name")
+    Category find(String name, String username);
 
     @Insert
     void insert(Category category);

@@ -67,6 +67,7 @@ public class SignInActivity extends AppCompatActivity {
         if(u.password.equals(edPassword.getText().toString())) {
 
             Intent intent = new Intent(this, MainActivity.class);
+            intent.putExtra("username",edUsername.getText().toString());
             this.startActivity(intent);
             finish();
             
