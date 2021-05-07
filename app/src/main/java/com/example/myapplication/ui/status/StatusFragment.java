@@ -1,6 +1,5 @@
 package com.example.myapplication.ui.status;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -9,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -22,7 +22,6 @@ import com.example.myapplication.database.Status;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 
 public class StatusFragment extends Fragment {
@@ -35,11 +34,11 @@ public class StatusFragment extends Fragment {
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
 
-        View root = inflater.inflate(R.layout.fragment_chung, container, false);
+        View root = inflater.inflate(R.layout.fragment_status, container, false);
 
         AppDatabase db = AppDatabase.getDatabase(getContext());
 
-        RecyclerView categoryView = root.findViewById(R.id.recycle_view);
+        RecyclerView categoryView = root.findViewById(R.id.recycle_view_status);
 
         db.getQueryExecutor().execute(() -> {
             statuses = db.statusDao().getAll();
@@ -64,8 +63,12 @@ public class StatusFragment extends Fragment {
             c.name = edCategory.getText().toString();
             c.created_date = LocalDateTime.now().toString();
             AppDatabase.databaseWriteExecutor.execute(()->{
-                if(db.statusDao().find(c.name) != null)
+                if(db.statusDao().find(c.name) != null) {
+                    getActivity().runOnUiThread(() -> {
+                        Toast.makeText(getContext(), "Đã tồn tại status này", Toast.LENGTH_SHORT).show();
+                    });
                     return;
+                }
                 db.statusDao().insert(c);
                 this.getActivity().runOnUiThread(() -> {
 
@@ -78,7 +81,7 @@ public class StatusFragment extends Fragment {
             al.cancel();
         });
 
-        FloatingActionButton fl = root.findViewById(R.id.floating_category);
+        FloatingActionButton fl = root.findViewById(R.id.floating_status);
         fl.setOnClickListener(v -> {
             al.show();
         });

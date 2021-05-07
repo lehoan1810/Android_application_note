@@ -1,6 +1,8 @@
 package com.example.myapplication;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
@@ -65,9 +67,13 @@ public class SignInActivity extends AppCompatActivity {
             return;
         }
         if(u.password.equals(edPassword.getText().toString())) {
-
             Intent intent = new Intent(this, MainActivity.class);
-            intent.putExtra("username",edUsername.getText().toString());
+
+            SharedPreferences sharedPref = getSharedPreferences("NOTE_SHARED_PREFERENCE",Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPref.edit();
+            editor.putString("username",edUsername.getText().toString());
+            editor.apply();
+
             this.startActivity(intent);
             finish();
             

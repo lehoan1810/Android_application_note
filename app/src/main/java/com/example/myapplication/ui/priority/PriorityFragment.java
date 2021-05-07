@@ -1,6 +1,5 @@
 package com.example.myapplication.ui.priority;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -9,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,12 +18,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.R;
 import com.example.myapplication.database.AppDatabase;
-import com.example.myapplication.database.Category;
 import com.example.myapplication.database.Priority;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 
 public class PriorityFragment extends Fragment {
@@ -36,11 +34,11 @@ public class PriorityFragment extends Fragment {
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
 
-        View root = inflater.inflate(R.layout.fragment_chung, container, false);
+        View root = inflater.inflate(R.layout.fragment_priority, container, false);
 
         AppDatabase db = AppDatabase.getDatabase(getContext());
 
-        RecyclerView categoryView = root.findViewById(R.id.recycle_view);
+        RecyclerView categoryView = root.findViewById(R.id.recycle_view_prioriy);
 
         db.getQueryExecutor().execute(() -> {
             priorities = db.priorityDao().getAll();
@@ -57,6 +55,7 @@ public class PriorityFragment extends Fragment {
         Button btnAdd = view.findViewById(R.id.btn_category_add);
         EditText edCategory = view.findViewById(R.id.edittext_category);
         TextView tv = view.findViewById(R.id.textView_dialog_title);
+
         tv.setText("Priority Form");
         al.setView(view);
 
@@ -65,8 +64,12 @@ public class PriorityFragment extends Fragment {
             c.name = edCategory.getText().toString();
             c.created_date = LocalDateTime.now().toString();
             AppDatabase.databaseWriteExecutor.execute(()->{
-                if(db.priorityDao().find(c.name) != null)
+                if(db.priorityDao().find(c.name) != null) {
+                    getActivity().runOnUiThread(() -> {
+                        Toast.makeText(getContext(), "Đã tồn tại priority này", Toast.LENGTH_SHORT).show();
+                    });
                     return;
+                }
                 db.priorityDao().insert(c);
                 this.getActivity().runOnUiThread(() -> {
 
@@ -79,7 +82,7 @@ public class PriorityFragment extends Fragment {
             al.cancel();
         });
 
-        FloatingActionButton fl = root.findViewById(R.id.floating_category);
+        FloatingActionButton fl = root.findViewById(R.id.floating_priority);
         fl.setOnClickListener(v -> {
             al.show();
         });

@@ -16,8 +16,11 @@ public interface PriorityDao {
     @Query("SELECT * FROM priority")
     List<Priority> getAll();
 
-    @Query("SELECT * FROM priority WHERE name = :name")
-    Priority find(String name);
+    @Query("SELECT * FROM priority WHERE id = :id")
+    Priority find(int id);
+
+    @Query("SELECT * FROM categories WHERE user = :username")
+    List<Category> getUserPriority(String username);
 
     @Insert
     void insert(Priority priority);

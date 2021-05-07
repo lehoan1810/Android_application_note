@@ -9,6 +9,9 @@ import java.util.Date;
 
 @Entity(tableName = "categories",primaryKeys = {"name", "user"})
 public class Category {
+    @PrimaryKey(autoGenerate = true)
+    public int id;
+
     @NonNull
     public String name;
 

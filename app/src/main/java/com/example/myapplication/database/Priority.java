@@ -9,7 +9,8 @@ import java.util.Date;
 
 @Entity(tableName = "priority")
 public class Priority {
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
+    public String id;
     @NonNull
     public String name;
 

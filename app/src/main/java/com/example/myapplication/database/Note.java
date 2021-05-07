@@ -7,12 +7,24 @@ import androidx.room.PrimaryKey;
 
 import java.util.Date;
 
-@Entity(tableName = "status")
-public class Status {
+@Entity(tableName = "notes")
+public class Note {
     @PrimaryKey(autoGenerate = true)
-    public int id;
     @NonNull
+    public int id;
+
     public String name;
 
+    public String plan_date;
+
     public String created_date;
+
+    public String category;
+
+    public  String priority;
+
+    public String status;
+
+    @NonNull
+    public String user;
 }

@@ -12,7 +12,7 @@ import java.util.concurrent.Executors;
 @Database(entities = {User.class, Category.class, Priority.class, Status.class}, version = 5)
 public abstract class AppDatabase extends RoomDatabase {
     public abstract UserDao userDao();
-    public abstract CategoryDao categoryDaoDao();
+    public abstract CategoryDao categoryDao();
     public abstract  PriorityDao priorityDao();
     public abstract  StatusDao statusDao();
 

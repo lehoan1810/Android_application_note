@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -21,10 +22,7 @@ import com.example.myapplication.database.Category;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 
-import org.w3c.dom.Text;
-
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 
 public class categoryFragment extends Fragment {
@@ -38,12 +36,12 @@ public class categoryFragment extends Fragment {
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
 
-        View root = inflater.inflate(R.layout.fragment_chung, container, false);
+        View root = inflater.inflate(R.layout.fragment_category, container, false);
 
         AppDatabase db = AppDatabase.getDatabase(getContext());
 
 
-        RecyclerView categoryView = root.findViewById(R.id.recycle_view);
+        RecyclerView categoryView = root.findViewById(R.id.recycle_view_category);
 
         NavigationView navigationView = getActivity().findViewById(R.id.nav_view);
 
@@ -54,7 +52,7 @@ public class categoryFragment extends Fragment {
         user = tv_username.getText().toString();
 
         db.getQueryExecutor().execute(() -> {
-            categories = db.categoryDaoDao().getUserCategory(user);
+            categories = db.categoryDao().getUserCategory(user);
             getActivity().runOnUiThread(() -> {
                 categoryAdapter = new CategoryAdapter(categories);
                 categoryView.setAdapter(categoryAdapter);
@@ -66,6 +64,7 @@ public class categoryFragment extends Fragment {
 
         AlertDialog al = new AlertDialog.Builder(root.getContext()).create();
         View view = getLayoutInflater().inflate(R.layout.dialog_category, null);
+
         Button btnAdd = view.findViewById(R.id.btn_category_add);
         EditText edCategory = view.findViewById(R.id.edittext_category);
         TextView tv = view.findViewById(R.id.textView_dialog_title);
@@ -78,9 +77,13 @@ public class categoryFragment extends Fragment {
             c.created_date = LocalDateTime.now().toString();
             c.user = this.user;
             AppDatabase.databaseWriteExecutor.execute(()->{
-                if(db.categoryDaoDao().find(c.name, c.user) != null)
+                if(db.categoryDao().find(c.name, c.user) != null) {
+                    getActivity().runOnUiThread(() -> {
+                        Toast.makeText(getContext(), "Đã tồn tại category này", Toast.LENGTH_SHORT).show();
+                    });
                     return;
-                db.categoryDaoDao().insert(c);
+                }
+                db.categoryDao().insert(c);
                 getActivity().runOnUiThread(() -> {
 
                     categoryAdapter.addCategory(c);

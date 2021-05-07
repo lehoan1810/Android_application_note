@@ -1,6 +1,8 @@
 package com.example.myapplication;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.view.View;
@@ -37,7 +39,12 @@ public class MainActivity extends AppCompatActivity {
         View header = navigationView.getHeaderView(0);
         TextView tv_username = header.findViewById(R.id.tv_username);
         Intent intent = getIntent();
-        tv_username.setText(intent.getExtras().getString("username"));
+        SharedPreferences sharedPref = getSharedPreferences("NOTE_SHARED_PREFERENCE", Context.MODE_PRIVATE);
+
+
+        String username = sharedPref.getString("username","Default name");
+
+        tv_username.setText(username);
 
         mAppBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.nav_home, R.id.nav_category, R.id.nav_priority,
