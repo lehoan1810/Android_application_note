@@ -10,8 +10,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.myapplication.database.AppDatabase;
 import com.example.myapplication.database.User;
 import com.example.myapplication.database.UserDao;
-
+//signup
 public class SignUpActivity extends AppCompatActivity {
+    //
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
