@@ -41,9 +41,7 @@ public class SignInActivity extends AppCompatActivity {
         btnSignIn.setOnClickListener(v -> {
 
             AppDatabase.databaseWriteExecutor.execute(()->{
-
                 check();
-
             });
 
         });
@@ -54,7 +52,7 @@ public class SignInActivity extends AppCompatActivity {
         });
 
     }
-
+//check
     void check(){
         User u = userDao.loadByEmail(edUsername.getText().toString());
         if(u == null)
